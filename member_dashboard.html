@@ -1,0 +1,104 @@
+<!-- admin_dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Member Dashboard - Task Management System</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a id="dashboardLink" class="nav-link active" href="javascript:void(0);"
+                                onclick="showDashboardContent()">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="taskAssignmentLink" class="nav-link" href="javascript:void(0);"
+                                onclick="showTaskAssignmentContent()">
+                                Assigned Tasks
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="profileLink" class="nav-link" href="javascript:void(0);"
+                                onclick="showProfileContent()">
+                                Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Member Dashboard</h1>
+                </div>
+
+                <!-- Dashboard Content -->
+                <div class="card mb-4" id="dashboardContent">
+                    <div class="card-body">
+                        <h2 class="card-title">Dashboard</h2>
+                        <!-- Add content specific to Dashboard -->
+                    </div>
+                </div>
+
+
+                <!-- Inside the Member Assigned task Content section -->
+                <div class="card mb-4" id="taskAssignmentContent" style="display:none;">
+                    <div class="card-body">
+                        <h2 class="card-title">Assigned Tasks</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Task ID</th>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assignedTasksList">
+                                <!-- Assigned tasks will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+                <!-- Profile Content -->
+                <div class="card mb-4" id="profileContent" style="display:none;">
+                    <div class="card-body">
+                        <h2 class="card-title">Profile</h2>
+                        <div>
+                            <h2>Profile Information</h2>
+                            <p id="profileEmail"></p>
+                            <p id="profilePassword"></p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="assets/js/member_dashboard.js"></script> <!-- Add admin dashboard specific script -->
+</body>
+
+</html>

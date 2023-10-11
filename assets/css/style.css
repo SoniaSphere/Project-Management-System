@@ -1,0 +1,78 @@
+body {
+    background-color: #f4f4f4;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.btn-block {
+    border-radius: 0;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 600px; /* Adjusted max-width to 600px */
+}
+
+/* Adjust sidebar styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0; /* Light gray background color */
+    width: 240px; /* Adjusted width */
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+}
+
+.sidebar a:hover {
+    background-color: #ddd; /* Light gray background color on hover */
+    color: #555; /* Dark gray text color on hover */
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff; /* Primary blue color for active link */
+    color: #fff; /* White text color for active link */
+}
+
+.sidebar .nav-link.active:hover {
+    background-color: #0056b3; /* Darker blue color on hover for active link */
+}
+
+/* Adjust main content styles */
+main {
+    margin-left: 240px; /* Match sidebar width */
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.sidebar .nav-link.active {
+    background-color: #007bff; /* Primary blue color for active link */
+    color: #fff; /* White text color for active link */
+}
+
+.sidebar .nav-link.active:hover {
+    background-color: #0056b3; /* Darker blue color on hover for active link */
+}
+
+
