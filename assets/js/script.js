@@ -129,6 +129,6 @@ function logout() {
     localStorage.removeItem('currentUser');
     
     // Redirect to the login page (you may adjust the URL as needed)
-    window.location.href = "/index.html";
+    window.location.href = "../../index.html";
 }
 
