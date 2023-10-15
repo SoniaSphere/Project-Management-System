@@ -124,9 +124,7 @@
                                     <th scope="col">Task ID</th>
                                     <th scope="col">Task Name</th>
                                     <th scope="col">Description</th>
-                                    <th scope="col">Start Date</th>
-                                    <th scope="col">End Date</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
                                     <!-- Add more columns if needed -->
                                 </tr>
                             </thead>
@@ -171,8 +169,7 @@
                                     <th scope="col">Task ID</th>
                                     <th scope="col">Task Name</th>
                                     <th scope="col">Assigned Member</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Completion Hours</th> <!-- New column for Completion Hours -->
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="assignedTaskList">
@@ -218,17 +215,9 @@
                         <label for="description" class="form-label">Description</label>
                         <textarea class="form-control" id="description" rows="3" required></textarea>
                     </div>
-                    <div class="mb-3">
-                        <label for="startDate" class="form-label">Start Date</label>
-                        <input type="date" class="form-control" id="startDate" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="endDate" class="form-label">End Date</label>
-                        <input type="date" class="form-control" id="endDate" required>
-                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="addTask()">Save Task</button>
                 </div>
             </div>

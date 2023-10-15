@@ -9,29 +9,56 @@ document.addEventListener("DOMContentLoaded", function () {
 // tasks functionality
 
 // Function to retrieve tasks from local storage and display them in the table
-function displayTasks() {
+    function displayTasks() {
+        // Retrieve tasks from local storage
+        var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        console.log(tasks);
+        // Get the table body element
+        var taskList = document.getElementById("taskList");
+
+        // Clear existing content in the table
+        taskList.innerHTML = '';
+
+        if (tasks.length === 0) {
+            // If there are no tasks, display a message
+            var newRow = taskList.insertRow(0);
+            newRow.innerHTML = `
+            <td colspan="7"><p class="no-task">No tasks available!</p></td> `;
+        } else {
+            // Loop through tasks and add them to the table
+            tasks.forEach(function (task, index) {
+                if(task.taskID){
+                var newRow = taskList.insertRow(taskList.rows.length);
+                newRow.innerHTML = `
+                    <td>${task.taskID}</td>
+                    <td>${task.taskName}</td>
+                    <td>${task.taskDescription}</td>
+                    <td><button class="btn btn-danger btn-sm remove-task" onclick="removeTask(${task.taskID})">Remove</button></td>
+                `;
+                }
+            });
+        }
+    }
+
+// delete task
+
+// Function to handle task removal
+function removeTask(taskId) {
     // Retrieve tasks from local storage
-    var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-    // Get the table body element
-    var taskList = document.getElementById("taskList");
-
-    // Clear existing content in the table
-    taskList.innerHTML = '';
-
-    // Loop through tasks and add them to the table
-    tasks.forEach(function (task, index) {
-        var newRow = taskList.insertRow(taskList.rows.length);
-        newRow.innerHTML = `
-            <td>${task.taskID}</td>
-            <td>${task.taskName}</td>
-            <td>${task.taskDescription}</td>
-            <td>${task.taskStartDate}</td>
-            <td>${task.taskEndDate}</td>
-            <td>${task.status}</td>
-        `;
+    // Find the task with the specified taskId and remove it
+    tasks = tasks.filter(function(task) {
+        return task.taskID !== taskId;
     });
+
+    // Update tasks in local storage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    // Refresh the task list display (you may replace this with your actual refresh function)
+    displayTasks();
 }
+
 
 // Call the displayTasks function to display tasks on page load
 window.onload = function () {
@@ -50,22 +77,18 @@ function addTask() {
     // Retrieve task details from the modal fields
     var taskName = document.getElementById("taskName").value;
     var description = document.getElementById("description").value;
-    var startDate = document.getElementById("startDate").value;
-    var endDate = document.getElementById("endDate").value;
 
     // Validate if all fields are filled
-    if (taskName.trim() === "" || description.trim() === "" || startDate.trim() === "" || endDate.trim() === "") {
+    if (taskName.trim() === "" || description.trim() === "") {
         alert("Please fill in all fields.");
         return;
     }
-    createTask(taskName, description, startDate, endDate, null);
+    createTask(taskName, description, null);
 
 
     // Clear modal fields
     document.getElementById("taskName").value = "";
     document.getElementById("description").value = "";
-    document.getElementById("startDate").value = "";
-    document.getElementById("endDate").value = "";
 
     // Refresh the tasks list
     displayTasks();
@@ -74,7 +97,7 @@ function addTask() {
     $('#addTaskModal').modal('hide');
 }
 
-function createTask(taskName, taskDescription, taskStartDate, taskEndDate, assignedMember) {
+function createTask(taskName, taskDescription, assignedMember) {
     // Generate a new task ID
     var taskID = generateTaskID();
 
@@ -86,7 +109,7 @@ function createTask(taskName, taskDescription, taskStartDate, taskEndDate, assig
         taskStartDate: taskStartDate,
         taskEndDate: taskEndDate,
         assignedMember: assignedMember,
-        status: "New" // Assuming the default status is "Pending"
+        status: "New"
     };
 
     // Retrieve tasks from localStorage
@@ -133,22 +156,30 @@ function displayMembers() {
     // Clear existing content in the table
     membersList.innerHTML = '';
 
-    // Loop through users and add them to the table
-    members.forEach(function(user) {
-        var newRow = membersList.insertRow(membersList.rows.length);
+    if (members.length === 0) {
+        // If there are no tasks, display a message
+        var newRow = taskList.insertRow(0);
         newRow.innerHTML = `
-            <td>${user.userID}</td>
-            <td>${user.name}</td>
-            <td>${user.email}</td>
-            <td>${user.role}</td>
-            <td>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="rateInput_${user.userID}" value="${user.rate || 20}">
-                    <button class="btn btn-primary" onclick="addRate(${user.userID})"><i class="fas fa-pencil-alt"></i></button>
-                </div>
-            </td>
-        `;
-    });
+        <td colspan="7"><p class="no-task">No members available at the moment!</p></td> `;
+    } else {
+
+        // Loop through users and add them to the table
+        members.forEach(function(user) {
+            var newRow = membersList.insertRow(membersList.rows.length);
+            newRow.innerHTML = `
+                <td>${user.userID}</td>
+                <td>${user.name}</td>
+                <td>${user.email}</td>
+                <td>${user.role}</td>
+                <td>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="rateInput_${user.userID}" value="${user.rate || 20}">
+                        <button class="btn btn-primary" onclick="addRate(${user.userID})"><i class="fas fa-pencil-alt"></i></button>
+                    </div>
+                </td>
+            `;
+        });
+    }
 }
 
 function addRate(userID) {
@@ -198,20 +229,54 @@ function displayAssignedTasks() {
     // Clear existing content in the table
     assignedTaskList.innerHTML = '';
 
+    var hasAssignedTasks = false;
+
     // Loop through assigned tasks and add them to the table
     tasks.forEach(function (task) {
-        if (task.assignedMember) { // Only display tasks with assigned members
+        if (task.assignedMember && task.assignedMember !== 'undefined') { // Check if assignedMember exists
             var newRow = assignedTaskList.insertRow(assignedTaskList.rows.length);
             newRow.innerHTML = `
                 <td>${task.taskID}</td>
                 <td>${task.taskName}</td>
                 <td>${task.assignedMember}</td>
-                <td>${task.status}</td>
-                <td></td>
+                <td><button class="btn btn-danger btn-sm remove-task" onclick="removeAssignment(${task.taskID})">Remove</button></td>
+
             `;
+
+            hasAssignedTasks = true;
         }
     });
+
+    if (!hasAssignedTasks) {
+        // If there are no tasks with assigned members, display a message
+        var newRow = assignedTaskList.insertRow(0);
+        newRow.innerHTML = `
+            <td colspan="5"><p class="no-task">No task assigned at the moment!</p></td>
+        `;
+    }
 }
+
+function removeAssignment(taskID) {
+    var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    // Find the task with the specified taskID
+    var task = tasks.find(function(task) {
+        return task.taskID === taskID;
+    });
+
+    if (task) {
+        // Remove the assigned member
+        task.assignedMember = undefined; // Assuming 'assignedMember' is a property in your task object
+
+        // Update tasks in local storage
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+
+        // Refresh the assigned task list display
+        displayAssignedTasks();
+    }
+}
+
+
 
 
 // admin_dashboard.js
