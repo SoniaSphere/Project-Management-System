@@ -25,9 +25,9 @@ function login() {
 
         // Redirect to respective dashboards based on role
         if (user.role === "administrator") {
-            window.location.href = "admin_dashboard.html";
+            window.location.href = "template-parts/admin/admin_dashboard.html";
         } else if (user.role === "member") {
-            window.location.href = "member_dashboard.html";
+            window.location.href = "template-parts/member/member_dashboard.html";
         }
     } else {
         alert("Invalid credentials. Please try again.");
@@ -114,4 +114,21 @@ function generateUserID() {
     return maxUserID + 1;
 }
 
+
+document.addEventListener("DOMContentLoaded", function () {
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    // if (!currentUser || currentUser.role !== "administrator") {
+    //     window.location.href = "index.html"; // Redirect to login page
+    // }
+});
+
+
+function logout() {
+    // Remove the current user information from local storage
+    localStorage.removeItem('currentUser');
+    
+    // Redirect to the login page (you may adjust the URL as needed)
+    window.location.href = "../../index.html";
+}
 
