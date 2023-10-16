@@ -1,117 +1,126 @@
-var users = JSON.parse(localStorage.getItem("users"));
-console.log(users);
+var users = JSON.parse(localStorage.getItem("users")) || [];
+
+function showSuccessMessage(message) {
+    document.getElementById("successMessage").innerText = message;
+    $('#successModal').modal('show');
+}
+
+function showErrorMessage(message, color = "red") {
+    var errorMessageElement = document.getElementById("errorMessage");
+    errorMessageElement.innerText = message;
+    errorMessageElement.style.color = color;
+    $('#errorModal').modal('show');
+}
+
+function validateEmail(email) {
+    // Regular expression for a valid email format
+    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return email.match(emailPattern);
+}
 
 function login() {
     var email = document.querySelector("#email").value;
     var password = document.querySelector("#password").value;
 
-    // Check if email and password are not empty
-    if (email.trim() === "" || password.trim() === "") {
-        alert("Please enter both email and password.");
-        return;
-    }
+    if (validateLoginInputs(email, password)) {
+        var user = findUser(email, password);
 
-    // Retrieve data from localStorage
-    var users = JSON.parse(localStorage.getItem("users"));
-
-    // Check if user exists
-    var user = users.find(function (user) {
-        return user.email === email && user.password === password;
-    });
-
-    if (user) {
-        // Store the current user in localStorage
-        localStorage.setItem("currentUser", JSON.stringify(user));
-
-        // Redirect to respective dashboards based on role
-        if (user.role === "administrator") {
-            window.location.href = "admin_dashboard.html";
-        } else if (user.role === "member") {
-            window.location.href = "member_dashboard.html";
+        if (user) {
+            loginUser(user);
+            redirectToDashboard(user.role);
+        } else {
+            showErrorMessage("Invalid credentials. Please try again.");
         }
-    } else {
-        alert("Invalid credentials. Please try again.");
     }
 }
 
+function validateLoginInputs(email, password) {
+    if (email.trim() === "" || password.trim() === "") {
+        showErrorMessage("Please enter both email and password.");
+        return false;
+    }
+
+    if (!validateEmail(email)) {
+        showErrorMessage("Please enter a valid email address.");
+        return false;
+    }
+
+    return true;
+}
+
+function findUser(email, password) {
+    return users.find(function (user) {
+        return user.email === email && user.password === password;
+    });
+}
+
+function loginUser(user) {
+    localStorage.setItem("currentUser", JSON.stringify(user));
+}
+
+function redirectToDashboard(role) {
+    var dashboardPage = role === "administrator" ? "admin_dashboard.html" : "member_dashboard.html";
+    window.location.href = dashboardPage;
+}
 
 function register() {
     var name = document.querySelector("#reg-name").value;
     var email = document.querySelector("#reg-email").value;
     var password = document.querySelector("#reg-password").value;
+    var confirmPassword = document.querySelector("#confirm-password").value;
     var role = document.querySelector("#role").value;
 
+    if (validateRegistrationInputs(name, email, password, confirmPassword, role)) {
+        if (!isEmailRegistered(email)) {
+            registerUser(email, password, role, name);
+            showSuccessMessage("Registration successful! You can now log in.");
+        }
+    }
+}
 
-    // Check if email, password, and role are not empty
-    if (email.trim() === "" || password.trim() === "" || role.trim() === "") {
-        alert("Please fill in all fields.");
-        return;
+function validateRegistrationInputs(name, email, password, confirmPassword, role) {
+    if (name.trim() === "" || email.trim() === "" || password.trim() === "" || role.trim() === "" || confirmPassword.trim() === "") {
+        showErrorMessage("Please fill in all fields.");
+        return false;
     }
 
-    // Retrieve existing users from localStorage or initialize an empty array
-    var users = JSON.parse(localStorage.getItem("users")) || [];
+    if (!validateEmail(email)) {
+        showErrorMessage("Please enter a valid email address.");
+        return false;
+    }
 
-    // Check if the email is already registered
+    if (!isPasswordValid(password)) {
+        showErrorMessage("Password must be at least 8 characters long and contain a capital letter, a lowercase letter, and a number.");
+        return false;
+    }
+
+    if (password !== confirmPassword) {
+        showErrorMessage("Password and Confirm Password do not match.");
+        return false;
+    }
+
+    return true;
+}
+
+function isEmailRegistered(email) {
     var existingUser = users.find(function (user) {
         return user.email === email;
     });
 
     if (existingUser) {
-        alert("This email is already registered. Please use a different email.");
-        return;
+        showErrorMessage("This email is already registered. Please use a different email.");
+        return true;
     }
 
-    registerUser(email, password, role, name);
-
-    // Clear the input fields
-    document.querySelector("#email").value = "";
-    document.querySelector("#password").value = "";
-    document.querySelector("#role").value = "";
-
-    // Switch to the login tab
-    document.querySelector("#login-tab").click();
-
-    alert("Registration successful! You can now log in.");
+    return false;
 }
 
-function registerUser(email, password, role, name) {
-    // Generate a new user ID
-    var userID = generateUserID();
+function isPasswordValid(password) {
+    // Password must be at least 8 characters, contain a capital letter, a lowercase letter, and a number
+    var lengthCheck = password.length >= 8;
+    var capitalCheck = /[A-Z]/.test(password);
+    var lowercaseCheck = /[a-z]/.test(password);
+    var numberCheck = /\d/.test(password);
 
-    // Create the new user object
-    var newUser = {
-        userID: userID,
-        email: email,
-        password: password,
-        role: role,
-        name: name
-    };
-
-    // Retrieve users from localStorage
-    var users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // Add the new user to the users list
-    users.push(newUser);
-
-    // Save the updated users back to localStorage
-    localStorage.setItem("users", JSON.stringify(users));
+    return lengthCheck && capitalCheck && lowercaseCheck && numberCheck;
 }
-
-
-function generateUserID() {
-    // Retrieve users from localStorage
-    var users = JSON.parse(localStorage.getItem("users")) || [];
-
-    // Find the maximum userID
-    var maxUserID = 0;
-    users.forEach(function (user) {
-        if (user.userID > maxUserID) {
-            maxUserID = user.userID;
-        }
-    });
-
-    // Increment the maximum userID to generate a new unique ID
-    return maxUserID + 1;
-}
-
-
