@@ -54,14 +54,21 @@ function findUser(email, password) {
     });
 }
 
-function loginUser(user) {
-    localStorage.setItem("currentUser", JSON.stringify(user));
+    if (user) {
+        // Store the current user in localStorage
+        localStorage.setItem("currentUser", JSON.stringify(user));
+
+        // Redirect to respective dashboards based on role
+        if (user.role === "administrator") {
+            window.location.href = "admin_dashboard.html";
+        } else if (user.role === "member") {
+            window.location.href = "member_dashboard.html";
+        }
+    } else {
+        alert("Invalid credentials. Please try again.");
+    }
 }
 
-function redirectToDashboard(role) {
-    var dashboardPage = role === "administrator" ? "admin_dashboard.html" : "member_dashboard.html";
-    window.location.href = dashboardPage;
-}
 
 function register() {
     var name = document.querySelector("#reg-name").value;
@@ -124,3 +131,5 @@ function isPasswordValid(password) {
 
     return lengthCheck && capitalCheck && lowercaseCheck && numberCheck;
 }
+
+

@@ -1,0 +1,257 @@
+<!-- admin_dashboard.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Admin Dashboard - Task Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid project-details">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a id="dashboardLink" class="nav-link" href="admin_dashboard.html">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+
+                            <a id="dashboardLink" class="nav-link active" href="projects.html">
+                                Projects
+                            </a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a id="membersLink" class="nav-link" href="members.html">
+                                Members
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="profileLink" class="nav-link" href="profile.html">
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a id="logoutLink" class="nav-link" href="javascript:void(0);"
+                                onclick="logout()">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="pt-3 pb-2 mb-3 border-bottom page-heading">
+                    <h1 class="h2">Projects</h1>
+                </div>
+                <!-- Tasks Content -->
+                <div class="mb-4" id="tasksContent">
+                    <div class="card-body">
+                        <div id="add-projects">
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addProjectModal">
+                                <i class="fas fa-plus"></i> Add Project
+                            </button>
+                            <div id="projectsContainer">
+
+                            </div>
+                        </div>
+                        <div id="projectDetailsContainer" class="card p-2">
+                            <!-- Project details will be displayed here -->
+                        </div>
+                        <div class="task-wrapper">
+                            <div id="tasksContainer" class="card p-2 mr-4">
+                                <h5 class="card-title">Tasks</h5>
+                                <button class="btn mb-2" id="add-task" onclick="showAddTaskModal()"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                <table id="task-table" class="table mt-5">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Task ID</th>
+                                            <th scope="col">Task Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="taskList">
+                                        <!-- Task items will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Inside the Task Assignment Content section -->
+                            <div id="taskAssignmentContainer" class="card p-2 mr-2">
+                                    <h5 class="card-title">Task Assignment</h5>
+                                    <button class="btn float-right"  id="assign-task" data-toggle="modal" data-target="#assignTaskModal" onclick="populateAssignTaskModal()">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                    </button>
+                                    <table class="table mt-5">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Task ID</th>
+                                                <th scope="col">Task Name</th>
+                                                <th scope="col">Assigned Member</th>
+                                                <th scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="assignedTaskList">
+                                            <!-- Assigned task items will be populated here -->
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+<!-- Modal -->
+<div class="modal fade" id="addProjectModal" tabindex="-1" aria-labelledby="addProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProjectModalLabel">Add Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Project form fields here -->
+                <div class="form-group">
+                    <label for="projectName">Project Name</label>
+                    <input type="text" class="form-control" id="projectName" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Project Description</label>
+                    <textarea class="form-control" id="projectDescription" rows="3" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="addProject()">Save Project</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for editing projects -->
+<div class="modal fade" id="editProjectModal" tabindex="-1" aria-labelledby="editProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProjectModalLabel">Edit Project</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="editProjectName" class="form-label">Project Name</label>
+                    <input type="text" class="form-control" id="editProjectName">
+                    <input type="hidden" class="form-control" id="editProjectId">
+                </div>
+                <div class="mb-3">
+                    <label for="editProjectDescription" class="form-label">Project Description</label>
+                    <textarea class="form-control" id="editProjectDescription" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveEditedProject()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Modal for adding tasks -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaskModalLabel">Add Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add task form fields here -->
+                    <div class="mb-3">
+                        <label for="taskName" class="form-label">Task Name</label>
+                        <input type="text" class="form-control" id="taskName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" rows="3" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="addTask()">Save Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal for assigning tasks -->
+     <div class="modal fade" id="assignTaskModal" tabindex="-1" aria-labelledby="assignTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="assignTaskModalLabel">Assign Task</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="taskDropdown" class="form-label">Select Task</label>
+                        <select class="form-select" id="taskDropdown">
+                            <option value="">Select Task</option>
+                            <!-- Task options will be populated here dynamically using JavaScript -->
+                        </select>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="memberDropdown" class="form-label">Select Member</label>
+                        <select class="form-select" id="memberDropdown">
+                            <option value="">Select Member</option>
+                            <!-- Member options will be populated here dynamically using JavaScript -->
+                        </select>
+                    </div>
+    
+                   
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="assignTask()">Assign Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../../assets/js/script.js"></script>
+    <script src="../../assets/js/admin/projects.js"></script>
+</body>
+
+</html>
