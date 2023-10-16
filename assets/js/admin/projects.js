@@ -31,22 +31,30 @@ function displayProjects() {
 
     projects.forEach(function (project) {
         var card = document.createElement("div");
-        card.classList.add("card", "mr-4");
 
-        var cardBody = document.createElement("div");
-        cardBody.classList.add("card-body");
+        card.classList.add("project-card", "mr-4");
+
+        var cardBody1 = document.createElement("div");
+        cardBody1.classList.add("back-folder-part");
+
+        var cardBody2 = document.createElement("div");
+        cardBody2.classList.add("main-folder-part");
 
         var cardTitle = document.createElement("h5");
         cardTitle.classList.add("card-title");
+
+        // var cardBody3 = document.createElement("div");
+        // cardBody3.classList.add("add-icon");
+
         cardTitle.textContent = project.name;
 
-        var cardText = document.createElement("p");
-        cardText.classList.add("card-text");
-        cardText.textContent = project.description;
+        // var cardText = document.createElement("p");
+        // cardText.classList.add("card-text");
+        // cardText.textContent = project.description;
 
         var editButton = document.createElement("button");
-        editButton.classList.add("btn", "btn-primary", "mr-2");
-        editButton.textContent = "Edit";
+        editButton.classList.add("btn", "edit");
+        editButton.innerHTML = '<i class="fa fa-edit" aria-hidden="true"></i>';
         editButton.setAttribute("data-toggle", "modal");
         editButton.setAttribute("data-target", "#editProjectModal");
         editButton.onclick = function() {
@@ -55,8 +63,8 @@ function displayProjects() {
         };
 
         var deleteButton = document.createElement("button");
-        deleteButton.classList.add("btn", "btn-danger");
-        deleteButton.textContent = "Delete";
+        deleteButton.classList.add("btn", "delete");
+        deleteButton.innerHTML = '<i class="fa fa-trash" aria-hidden="true"></i>';
         deleteButton.onclick = function() {
             // Prompt user for confirmation before deleting project
             var confirmDelete = confirm("Are you sure you want to delete this project?");
@@ -65,14 +73,17 @@ function displayProjects() {
             }
         };
 
-        cardBody.appendChild(cardTitle);
-        cardBody.appendChild(cardText);
-        cardBody.appendChild(editButton);
-        cardBody.appendChild(deleteButton);
-        card.appendChild(cardBody);
+        cardBody2.appendChild(cardTitle);
+        // cardBody.appendChild(cardText);
+        // cardBody2.appendChild(cardBody3);
+        cardBody1.appendChild(cardBody2);
+        card.appendChild(cardBody1);
+        card.appendChild(editButton);
+        card.appendChild(deleteButton);
+
 
         // Add click functionality to the card
-        card.onclick = function() {
+        cardBody2.onclick = function() {
             showProjectDetails(project.id);
         };
 
@@ -150,10 +161,11 @@ function deleteProject(id) {
 }
 
 function showProjectDetails(projectId) {
+
     // Retrieve project details from local storage
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
     var project = projects.find(project => project.id === projectId);
-
+    var projectsContainer = document.getElementById("add-projects");
     var projectDetailsContainer = document.getElementById("projectDetailsContainer");
     var tasksContainer = document.getElementById("tasksContainer");
     var taskAssignmentContainer = document.getElementById("taskAssignmentContainer");
@@ -161,7 +173,8 @@ function showProjectDetails(projectId) {
     var assignBtn = document.getElementById("assign-task");
 
    
-
+    projectsContainer.style.display = 'none';
+    projectDetailsContainer.style.display = 'block';
     // Clear existing content in the container
     projectDetailsContainer.innerHTML = '';
 
@@ -261,7 +274,7 @@ function displayTasks(projectId) {
                 <td>${task.taskName}</td>
                 <td>${task.taskDescription}</td>
                 <td>
-                    <button class="btn btn-danger btn-sm" onclick="deleteTask(${task.taskID}, ${project.id})">Delete</button>
+                    <button class="btn btn-sm" onclick="deleteTask(${task.taskID}, ${project.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </td>
             `;
         });
@@ -426,7 +439,7 @@ function displayAssignedTasks(projectId) {
                     <td>${task.taskName}</td>
                     <td>${task.assignedMember}</td>
                     <td>
-                        <button class="btn btn-danger btn-sm" onclick="deleteAssign(${project.id}, ${task.taskID})">Delete</button>
+                        <button class="btn btn-sm" onclick="deleteAssign(${project.id}, ${task.taskID})"> <i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>
                 `;
             });

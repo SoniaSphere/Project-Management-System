@@ -14,13 +14,174 @@
     <style>
     #projectsContainer .card {
     width: 200px;
-    height: 200px; 
+    height: auto; 
     overflow: hidden;
     display: inline-block;
 }
     div#tasksContainer, div#taskAssignmentContainer {
+        width: 100%;
         display: none;
     }
+    div#projectsContainer .card-body .btn {
+    font-size: 12px;
+}
+#projectsContainer .card-body {
+    text-align: center;
+    cursor: pointer;
+}
+.project-card {
+    /* margin: 60px auto; */
+    position: relative;
+    width: 200px;
+    cursor: pointer;
+}
+
+.main-folder-part {
+    background-image: linear-gradient(180deg, #72BAFB 0%, #347EE1 100%);
+    box-shadow: inset 0 1px 3px 0 rgba(255,255,255,0.50), 0 -2px 2px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    height: 150px;
+    position: relative;
+    width: 200px;
+}
+.main-folder-part:after {
+    content:'';
+    box-shadow: 0 8px 8px 0 rgba(114,186,251,0.60);
+    border-radius: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+
+.back-folder-part {
+    height: 150px;
+    position: absolute;
+    width: 200px;
+}
+.back-folder-part:after {
+    background: #5CA4F1;
+    border-radius: 5px 5px 0 0;
+    content:'';
+    height: 20px;
+    position: absolute;
+    top: -15px;
+    width: 150px;
+}
+.back-folder-part:before {
+    background: #5CA4F1;
+    border-radius: 0 5px 0 0;
+    content:'';
+    height: 10px;
+    position: absolute;
+    right: 2px;
+    top: -6px;
+    width: 150px;
+}
+
+.add-icon {
+    background-image: linear-gradient(179deg, #B6F9A5 0%, #79C166 95%);
+    border-radius: 9999px;
+    bottom: -15px;
+    box-shadow: 0 4px 12px 0 rgba(79,140,62,0.40), inset 0 1px 3px 0 rgba(255,255,255,0.50);
+    height: 50px;
+    right: -15px;
+    position: absolute;
+    width: 50px;
+}
+.add-icon:before, .add-icon:after {
+    background: #5D9D4D;
+    border-radius: 9999px;
+    content: '';
+    position: absolute;
+}
+.add-icon:after {
+    box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.6);
+    height: 24px;
+    left: calc(50% - 2px);
+    top: calc(50% - 12px);
+    width: 4px;
+}
+.add-icon:before {
+    box-shadow: inset 0 1px 3px 0 rgba(0,0,0,0.10), 0 1px 0 rgba(255,255,255,0.6);
+    height: 4px;
+    left: calc(50% - 12px);
+    top: calc(50% - 2px);
+    width: 24px;
+}
+div#projectsContainer {
+    display: flex;
+    align-items: center;
+}
+.main-folder-part h5 {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #313644;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
+    background: #f4f4f4;
+    padding: 5px;
+    margin-bottom: 0;
+}
+#projectDetailsContainer {
+    text-align: center;
+}
+
+#projectDetailsContainer h3 {
+    text-decoration: underline;
+    /* background: #e9eefd; */
+}
+.task-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+#projectDetailsContainer {
+    display: none;
+    text-align: center;
+    min-height: 200px;
+}
+button#add-task, button#assign-task {
+    font-size: 30px;
+    color: #59678f;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.task-wrapper table{
+    font-size: 14px;
+}
+.task-wrapper table button {
+    font-size: 12px;
+    color: #e40909;
+}
+button.btn.edit {
+    position: absolute;
+    top: 10px;
+    color: white;
+}
+
+button.btn.delete {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    color: #ffd7e2;;
+}
+select {
+    word-wrap: normal;
+    width: 200px;
+    float: right;
+    border: 1px dotted #7e7f7f;
+    border-radius: 2px;
+    height: 30px;
+    background: #f8f8f8;
+}
 
     </style>
 </head>
@@ -68,27 +229,28 @@
 
             <!-- Main content -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Admin Dashboard</h1>
+                <div class="pt-3 pb-2 mb-3 border-bottom page-heading">
+                    <h1 class="h2">Projects</h1>
                 </div>
-
                 <!-- Tasks Content -->
-                <div class="card mb-4" id="tasksContent">
+                <div class="mb-4" id="tasksContent">
                     <div class="card-body">
-                        <div class="add-projects">
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addProjectModal">
+                        <div id="add-projects">
+                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addProjectModal">
                                 <i class="fas fa-plus"></i> Add Project
                             </button>
                             <div id="projectsContainer">
 
                             </div>
-                            <div id="projectDetailsContainer">
-                                <!-- Project details will be displayed here -->
-                            </div>
-                            <div id="tasksContainer">
-                                <h2 class="card-title">Tasks</h2>
-                                <button class="btn btn-primary float-right mb-2" id="add-task" onclick="showAddTaskModal()">Add Task</button>
-                                <table id="task-table" class="table">
+                        </div>
+                        <div id="projectDetailsContainer" class="card p-2">
+                            <!-- Project details will be displayed here -->
+                        </div>
+                        <div class="task-wrapper">
+                            <div id="tasksContainer" class="card p-2 mr-4">
+                                <h5 class="card-title">Tasks</h5>
+                                <button class="btn mb-2" id="add-task" onclick="showAddTaskModal()"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
+                                <table id="task-table" class="table mt-5">
                                     <thead>
                                         <tr>
                                             <th scope="col">Task ID</th>
@@ -102,13 +264,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                             <!-- Inside the Task Assignment Content section -->
-                            <div id="taskAssignmentContainer">
-                                    <h2 class="card-title">Task Assignment</h2>
-                                    <button class="btn btn-primary float-right"  id="assign-task" data-toggle="modal" data-target="#assignTaskModal" onclick="populateAssignTaskModal()">
-                                        Assign Task
+                            <!-- Inside the Task Assignment Content section -->
+                            <div id="taskAssignmentContainer" class="card p-2 mr-2">
+                                    <h5 class="card-title">Task Assignment</h5>
+                                    <button class="btn float-right"  id="assign-task" data-toggle="modal" data-target="#assignTaskModal" onclick="populateAssignTaskModal()">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
                                     </button>
-                                    <table class="table">
+                                    <table class="table mt-5">
                                         <thead>
                                             <tr>
                                                 <th scope="col">Task ID</th>
