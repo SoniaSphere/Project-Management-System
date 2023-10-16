@@ -20,22 +20,23 @@ function displayProjects() {
     } else {
         assignedProjects.forEach(function (project) {
             var card = document.createElement("div");
-            card.classList.add("card", "mr-4");
 
-            var cardBody = document.createElement("div");
-            cardBody.classList.add("card-body");
-
+            card.classList.add("project-card", "mr-4");
+    
+            var cardBody1 = document.createElement("div");
+            cardBody1.classList.add("back-folder-part");
+    
+            var cardBody2 = document.createElement("div");
+            cardBody2.classList.add("main-folder-part");
+    
             var cardTitle = document.createElement("h5");
             cardTitle.classList.add("card-title");
+    
             cardTitle.textContent = project.name;
 
-            var cardText = document.createElement("p");
-            cardText.classList.add("card-text");
-            cardText.textContent = project.description;
-
-            cardBody.appendChild(cardTitle);
-            cardBody.appendChild(cardText);
-            card.appendChild(cardBody);
+            cardBody2.appendChild(cardTitle);
+            cardBody1.appendChild(cardBody2);
+            card.appendChild(cardBody1);
 
             // Add click functionality to the card
             card.onclick = function() {
@@ -52,12 +53,12 @@ function showProjectDetails(projectId) {
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
     var project = projects.find(project => project.id === projectId);
 
+    var projectsContainer = document.getElementById("projectsContainer");
     var projectDetailsContainer = document.getElementById("projectDetailsContainer");
     var tasksContainer = document.getElementById("tasksContainer");
 
-   
-
-    // Clear existing content in the container
+    projectsContainer.style.display = 'none';
+    projectDetailsContainer.style.display = 'block';
     projectDetailsContainer.innerHTML = '';
 
     // Create elements to display project details
@@ -100,11 +101,12 @@ function displayAssignedTasks(projectId) {
         } else {
             assignedTasks.forEach(function (task) {
                 var newRow = assignedTaskList.insertRow(assignedTaskList.rows.length);
+                var hoursCompleted = task.hoursCompleted != undefined ? task.hoursCompleted : "N/A";
                 newRow.innerHTML = `
                     <td>${task.taskID}</td>
                     <td>${task.taskName}</td>
                     <td>${task.taskDescription}</td>
-                    <td>${task.hoursCompleted}</td>
+                    <td>${hoursCompleted}</td>
                     <td>
                         <select class="form-select" onchange="changeTaskStatus(${project.id}, ${task.taskID}, this)">
                             <option value="New" ${task.status === "New" ? "selected" : ""}>New</option>

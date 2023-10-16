@@ -43,14 +43,7 @@ function displayProjects() {
         var cardTitle = document.createElement("h5");
         cardTitle.classList.add("card-title");
 
-        // var cardBody3 = document.createElement("div");
-        // cardBody3.classList.add("add-icon");
-
         cardTitle.textContent = project.name;
-
-        // var cardText = document.createElement("p");
-        // cardText.classList.add("card-text");
-        // cardText.textContent = project.description;
 
         var editButton = document.createElement("button");
         editButton.classList.add("btn", "edit");
@@ -74,8 +67,6 @@ function displayProjects() {
         };
 
         cardBody2.appendChild(cardTitle);
-        // cardBody.appendChild(cardText);
-        // cardBody2.appendChild(cardBody3);
         cardBody1.appendChild(cardBody2);
         card.appendChild(cardBody1);
         card.appendChild(editButton);
