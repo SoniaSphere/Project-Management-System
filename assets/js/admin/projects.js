@@ -1,17 +1,22 @@
+var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+var currentUserID = currentUser.userID;
+var addProjects = document.getElementById("add-projects");
+var noProjectCt = document.getElementById("no-project-ct");
+
 // Function to add a project
 function addProject() {
+    
     var projectName = document.getElementById("projectName").value;
     var projectDescription = document.getElementById("projectDescription").value;
 
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
 
-    var projectId = Date.now();
-
     // Create a new project object
     var newProject = {
-        id: projectId,
+        id: generateProjectID(),
         name: projectName,
         description: projectDescription,
+        adminId: currentUserID,
         tasks: []
     };
 
@@ -23,7 +28,23 @@ function addProject() {
 }
 
 function displayProjects() {
-    var projects = JSON.parse(localStorage.getItem("projects")) || [];
+    
+    var allProjects = JSON.parse(localStorage.getItem("projects")) || [];
+    // Filter projects for the current user
+    var projects = allProjects.filter(function(project) {
+        return project.adminId === currentUserID;
+    });
+    
+    if(projects.length == 0){
+        addProjects.style.display = 'none';
+        noProjectCt.style.display = 'block';
+    }else{
+        addProjects.style.display = 'block';
+        noProjectCt.style.display = 'none';
+    }
+
+    
+
     var projectsContainer = document.getElementById("projectsContainer");
 
     // Clear existing content in the container
@@ -223,7 +244,7 @@ function addTask() {
             taskName: taskName,
             taskDescription: taskDescription,
             assignedMember: null,
-            status: "New"
+            status: "Pending"
         };
 
 
@@ -325,6 +346,28 @@ function generateTaskID() {
 
     return newTaskID;
 }
+
+//
+function generateProjectID() {
+    // Retrieve projects from localStorage
+    var projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+    // Find the maximum projectID
+    var maxProjectID = 0;
+
+    projects.forEach(function (project) {
+        var projectIdNumber = parseInt(project.id);
+        if (projectIdNumber > maxProjectID) {
+            maxProjectID = projectIdNumber;
+        }
+    });
+
+    // Increment the maximum projectID
+    var newProjectID = maxProjectID + 1;
+
+    return newProjectID;
+}
+
 
 
 
@@ -498,3 +541,5 @@ function clearTasksForProject(projectId) {
 
 // Initialize project list on page load
 window.onload = displayProjects;
+
+// localStorage.removeItem("projects");

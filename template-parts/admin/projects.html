@@ -62,8 +62,12 @@
                 <!-- Tasks Content -->
                 <div class="mb-4" id="tasksContent">
                     <div class="card-body">
+                        <div id="no-project-ct">
+                            <i class="fa fa-plus-circle" aria-hidden="true" data-toggle="modal" data-target="#addProjectModal"></i>
+                        
+                        </div>
                         <div id="add-projects">
-                            <button type="button" class="btn btn-primary float-right" data-toggle="modal" data-target="#addProjectModal">
+                            <button type="button" id="add-pr-btn" class="btn btn-primary float-right" data-toggle="modal" data-target="#addProjectModal">
                                 <i class="fas fa-plus"></i> Add Project
                             </button>
                             <div id="projectsContainer">
