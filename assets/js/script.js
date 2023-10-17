@@ -1,3 +1,4 @@
+//1st code 
 var users = JSON.parse(localStorage.getItem("users"));
 console.log(users);
 
@@ -39,6 +40,7 @@ function register() {
     var name = document.querySelector("#reg-name").value;
     var email = document.querySelector("#reg-email").value;
     var password = document.querySelector("#reg-password").value;
+    var confirmPassword = document.querySelector("#confirm-password").value;
     var role = document.querySelector("#role").value;
 
 
@@ -61,6 +63,19 @@ function register() {
         return;
     }
 
+    // Check if the passwords match
+    if (password !== confirmPassword) {
+        alert("Password and Confirm Password do not match.");
+        return;
+    }
+
+    // Validate the password according to your criteria
+    var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!password.match(passwordRegex)) {
+        alert("Password must be at least 8 characters long and contain a capital letter, a lowercase letter, and a number.");
+        return;
+    }
+    
     registerUser(email, password, role, name);
 
     // Clear the input fields
@@ -127,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // }
 });
 
-
 function logout() {
     // Remove the current user information from local storage
     localStorage.removeItem('currentUser');
@@ -135,4 +149,3 @@ function logout() {
     // Redirect to the login page (you may adjust the URL as needed)
     window.location.href = "../../index.html";
 }
-
