@@ -32,11 +32,10 @@ function displayMembers() {
                 <td>${user.userID}</td>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
-                <td>${user.role}</td>
                 <td>
                     <div class="input-group">
-                        <input type="number" class="form-control" id="rateInput_${user.userID}" value="${user.rate || 20}">
-                        <button class="btn btn-primary" onclick="addRate(${user.userID})"><i class="fas fa-pencil-alt"></i></button>
+                        <input type="number" class="form-control" id="rateInput_${user.userID}" value="${user.rate}">
+                        <button class="btn btn-success" onclick="addRate(${user.userID})"><i class="fa fa-check" aria-hidden="true"></i></button>
                     </div>
                 </td>
             `;
