@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.onload = function () {
-    displayAssignedTasks();
+    // displayAssignedTasks();
+    collectData()
 };
 
 function displayAssignedTasks() {
@@ -18,8 +19,9 @@ function displayAssignedTasks() {
 
     // Filter tasks that are assigned to the current member (you may replace "currentUserEmail" with actual member's email)
     var currentUserEmail = localStorage.getItem("currentUser");
+
     var assignedTasks = tasks.filter(function (task) {
-        return task.assignedMember === currentUserEmail;
+        return task.assignedMember === currentUserEmail.userID
     });
 
     // Get the table body element
@@ -105,4 +107,66 @@ function showProfileContent() {
         link.classList.remove('active');
     });
     document.getElementById('profileLink').classList.add('active');
+}
+
+
+//get overview projects data
+function collectData(){
+
+    var projectData = {
+        labels: [],
+        hours: [],
+        tasks: [],
+    }
+
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    var assignedProjects = (JSON.parse(localStorage.getItem("projects")) || []).filter(function(project) {
+        return project.tasks.some(task => task.assignedMember === currentUser.userID);
+    });;
+    assignedProjects.forEach( project => {
+
+        projectData.labels.push("Project: "+project.name)
+
+        var assignedTasks = project.tasks.filter(task => task.assignedMember == currentUser.userID);
+        var totalHours = 0
+        assignedTasks.forEach( task => {
+            totalHours += (task.hoursCompleted != undefined) ? task.hoursCompleted : 0
+        })
+        projectData.tasks.push(assignedTasks.length)
+        projectData.hours.push(totalHours)
+
+    })
+
+    const ctx = document.getElementById("projectChart").getContext("2d");
+    const myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: projectData.labels,
+            datasets: [
+                {
+                    label: "Hours Contributed",
+                    data: projectData.hours,
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1
+                },
+                {
+                    label: "Tasks Assigned",
+                    data: projectData.tasks,
+                    backgroundColor: "rgba(255, 99, 132, 0.2)",
+                    borderColor: "rgba(255, 99, 132, 1)",
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
 }
