@@ -87,6 +87,10 @@ function registerUser(email, password, role, name) {
         name: name
     };
 
+    if(role == 'member'){
+        newUser.rate = 20; // default rate
+    }
+
     // Retrieve users from localStorage
     var users = JSON.parse(localStorage.getItem("users")) || [];
 

@@ -1,6 +1,7 @@
+var addProjects = document.getElementById("add-projects");
+
 function displayProjects() {
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
-    console.log(projects);
     var projectsContainer = document.getElementById("projectsContainer");
     var currentUser = JSON.parse(localStorage.getItem("currentUser")); 
     // Clear existing content in the container
@@ -18,6 +19,7 @@ function displayProjects() {
         message.textContent = "No projects assigned to you.";
         projectsContainer.appendChild(message);
     } else {
+        addProjects.style.display = 'block';
         assignedProjects.forEach(function (project) {
             var card = document.createElement("div");
 
