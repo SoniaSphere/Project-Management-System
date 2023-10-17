@@ -83,6 +83,8 @@ function displayAssignedTasks(projectId) {
     // Find the project with the specified projectId
     var project = projects.find(project => project.id === projectId);
 
+    var currentUser = JSON.parse(localStorage.getItem("currentUser")); 
+
     if (project) {
         var assignedTaskList = document.getElementById("assignedTaskList");
 
@@ -90,7 +92,8 @@ function displayAssignedTasks(projectId) {
         assignedTaskList.innerHTML = '';
 
         // Filter tasks that have an assigned member
-        var assignedTasks = project.tasks.filter(task => task.assignedMember !== null);
+        // var assignedTasks = project.tasks.filter(task => task.assignedMember !== null);
+        var assignedTasks = project.tasks.filter(task => task.assignedMember == currentUser.userID);
 
         if (assignedTasks.length === 0) {
             // If there are no assigned tasks, display a message
@@ -143,7 +146,7 @@ function changeTaskStatus(projectId, taskId, selectElement) {
 
             if (newStatus === "In Progress" && !task.taskStartDate) {
                 task.taskStartDate = currentDate;
-            } else if (newStatus === "Completed" && !task.taskEndDate) {
+            } else if (newStatus === "Completed" && (task.hoursCompleted == undefined || !task.taskEndDate))  {
                 task.taskEndDate = currentDate;
 
                 // Prompt member to enter hours completed
