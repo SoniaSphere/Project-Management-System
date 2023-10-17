@@ -311,16 +311,41 @@ function deleteTask(taskId, projectId) {
     // Prompt user for confirmation before deleting project
     var confirmDelete = confirm("Are you sure you want to delete this task?");
     if (confirmDelete) {
-        project.tasks = project.tasks.filter(task => task.taskID !== taskId);
-    
-        // Update projects in local storage
-        localStorage.setItem('projects', JSON.stringify(projects));
-    
-        // Refresh the task list display
-        displayTasks(projectId);
-    }
 
+        project.tasks.filter(task => task.taskID == taskId).forEach( task => {
+            //check if task has been assigned or not before deleting a task.
+            if(checkTaskAssigned(task)){
+                alert("This task has been assigned to a member. Remove the task assignment first to delete a task."); 
+                return
+            }
+            else{
+
+                project.tasks = project.tasks.filter(task => task.taskID !== taskId);
+
+                // Update projects in local storage
+                localStorage.setItem('projects', JSON.stringify(projects));
+            
+                // Refresh the task list display
+                displayTasks(projectId);
+
+                //Refresh the assigned task list display
+                displayAssignedTasks(projectId)
+                
+            }
+        })
+
+        
+    }
     
+}
+
+function checkTaskAssigned(task){
+    var users = JSON.parse(localStorage.getItem("users")) || [];
+    var assignedMember = users.find(function (user){
+        return user.userID === task.assignedMember
+    });
+    console.log("check task assign for task: "+task.taskID +" is "+assignedMember)
+    return assignedMember
 }
 
 
@@ -379,6 +404,15 @@ function populateAssignTaskModal() {
     var memberDropdown = document.getElementById("memberDropdown");
     var taskDropdown = document.getElementById("taskDropdown");
     var projectId = parseInt(document.getElementById("assign-task").getAttribute("data-project-id"));
+
+    //remove previous appended task list for redundancy
+    while(taskDropdown.firstChild){
+        taskDropdown.removeChild(taskDropdown.firstChild)
+    }
+    //remove previous appended members list for redundancy
+    while(memberDropdown.firstChild){
+        memberDropdown.removeChild(memberDropdown.firstChild)
+    }
 
     // Populate member dropdown based on users with role "member"
     users.forEach(function (user) {
@@ -447,6 +481,8 @@ function assignTask() {
 function displayAssignedTasks(projectId) {
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
 
+    var users = JSON.parse(localStorage.getItem("users")) || [];
+
     // Find the project with the specified projectId
     var project = projects.find(project => project.id === projectId);
 
@@ -467,11 +503,16 @@ function displayAssignedTasks(projectId) {
             `;
         } else {
             assignedTasks.forEach(function (task) {
+
+                //Find the assigned member of the task
+                var assignedMember = users.find(user => user.userID === task.assignedMember);
+                console.log("task:"+task.taskID+" got:" +assignedMember)
+
                 var newRow = assignedTaskList.insertRow(assignedTaskList.rows.length);
                 newRow.innerHTML = `
                     <td>${task.taskID}</td>
                     <td>${task.taskName}</td>
-                    <td>${task.assignedMember}</td>
+                    <td>${assignedMember.name}</td>
                     <td>
                         <button class="btn btn-sm" onclick="deleteAssign(${project.id}, ${task.taskID})"> <i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>
