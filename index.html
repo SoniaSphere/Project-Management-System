@@ -14,7 +14,7 @@
     </style>
 </head>
 
-<body>
+<body>  
     <div class="container mt-5">
         <h1 class="text-center mb-4">Task Management System</h1>
         <div class="card p-4 mx-auto">
@@ -76,6 +76,39 @@
                         </div>
                         <button type="button" class="btn btn-success btn-block" onclick="register()">Register</button>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals for Success and Error Messages -->
+    <div class="modal" id="successModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Success</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="successMessage"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="errorModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage"></p>
                 </div>
             </div>
         </div>

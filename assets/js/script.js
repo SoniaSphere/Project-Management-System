@@ -1,6 +1,15 @@
-//1st code 
 var users = JSON.parse(localStorage.getItem("users"));
 console.log(users);
+
+function showSuccessMessage(message) {
+    document.getElementById("successMessage").innerText = message;
+    $('#successModal').modal('show');
+}
+
+function showErrorMessage(message) {
+    document.getElementById("errorMessage").innerText = message;
+    $('#errorModal').modal('show');
+}
 
 function login() {
     var email = document.querySelector("#email").value;
@@ -8,7 +17,7 @@ function login() {
 
     // Check if email and password are not empty
     if (email.trim() === "" || password.trim() === "") {
-        alert("Please enter both email and password.");
+        showErrorMessage("Please enter both email and password.");
         return;
     }
 
@@ -31,7 +40,7 @@ function login() {
             window.location.href = "template-parts/member/member_dashboard.html";
         }
     } else {
-        alert("Invalid credentials. Please try again.");
+        showErrorMessage("Invalid credentials. Please try again.");
     }
 }
 
@@ -46,7 +55,7 @@ function register() {
 
     // Check if email, password, and role are not empty
     if (email.trim() === "" || password.trim() === "" || role.trim() === "") {
-        alert("Please fill in all fields.");
+        showErrorMessage("Please fill in all fields.");
         return;
     }
 
@@ -59,23 +68,23 @@ function register() {
     });
 
     if (existingUser) {
-        alert("This email is already registered. Please use a different email.");
+        showErrorMessage("This email is already registered. Please use a different email.");
         return;
     }
 
     // Check if the passwords match
     if (password !== confirmPassword) {
-        alert("Password and Confirm Password do not match.");
+        showErrorMessage("Password and Confirm Password do not match.");
         return;
     }
 
     // Validate the password according to your criteria
     var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
     if (!password.match(passwordRegex)) {
-        alert("Password must be at least 8 characters long and contain a capital letter, a lowercase letter, and a number.");
+        showErrorMessage("Password must be at least 8 characters long and contain a capital letter, a lowercase letter, and a number.");
         return;
     }
-    
+
     registerUser(email, password, role, name);
 
     // Clear the input fields
@@ -86,7 +95,7 @@ function register() {
     // Switch to the login tab
     document.querySelector("#login-tab").click();
 
-    alert("Registration successful! You can now log in.");
+    showErrorMessage("Registration successful! You can now log in.");
 }
 
 function registerUser(email, password, role, name) {
