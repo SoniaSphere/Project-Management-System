@@ -11,6 +11,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/member_profile.css">
 </head>
 
 <body>
@@ -60,14 +61,44 @@
                     <h1 class="h2">Profile</h1>
                 </div>
                 <!-- Profile Content -->
-                <div class="card mb-4" id="profileContent" style="display:none;">
+                <div class="card mb-4" id="profileContent">
                     <div class="card-body">
-                        <h2 class="card-title">Profile</h2>
-                        <div>
-                            <h2>Profile Information</h2>
-                            <p id="profileEmail"></p>
-                            <p id="profilePassword"></p>
+
+                        <div class="profile-container">
+
+                            <img id="profile_pic" src="../../assets/images/user.png" alt="Profile Picture" class="profile-picture">
+                            <input type="file" id="profile-picture-input" accept="image/*" style="display: none">
+
+                            <form class="profile-form">
+
+                                <div class="form-group">
+                                    <label for="name">Name</label>
+                                    <input type="text" id="name" name="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" placeholder="Your Email" required disabled="true">
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">New Password</label>
+                                    <input type="password" id="password" name="password" placeholder="Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Confirm Password</label>
+                                    <input type="password" id="c_password" name="password" placeholder="Password" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="role">Role</label>
+                                    <select id="role" name="role">
+                                    </select>
+                                </div>
+                                
+                                <button type="submit" class="update-button" onclick="updateProfile()">Update Profile</button>
+
+                            </form>
                         </div>
+                       
                     </div>
                 </div>
             </main>
