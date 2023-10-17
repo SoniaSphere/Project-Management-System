@@ -385,3 +385,21 @@ button#add-pr-btn {
 .card-body.chart-container canvas{
     padding-bottom: 10px;
 }
+
+.membersList button {
+    font-size: 12px;
+    padding: 0px 10px;
+}
+
+#membersList td {
+    width: 200px;
+}
+
+span.go-back-btn {
+    position: absolute;
+    left: 10px;
+    top: 0;
+    font-size: 22px;
+    color: #59678f;
+    cursor: pointer;    
+}
