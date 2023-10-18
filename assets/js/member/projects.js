@@ -109,11 +109,12 @@ function displayAssignedTasks(projectId) {
                 <td colspan="5"><p class="no-task">No tasks assigned at the moment.</p></td>
             `;
         } else {
+            $count = 1;
             assignedTasks.forEach(function (task) {
                 var newRow = assignedTaskList.insertRow(assignedTaskList.rows.length);
                 var hoursCompleted = task.hoursCompleted != undefined ? task.hoursCompleted : "N/A";
                 newRow.innerHTML = `
-                    <td>${task.taskID}</td>
+                    <td>${$count}</td>
                     <td>${task.taskName}</td>
                     <td>${task.taskDescription}</td>
                     <td>${hoursCompleted}</td>
@@ -125,6 +126,7 @@ function displayAssignedTasks(projectId) {
                         </select>
                     </td>
                 `;
+                $count++;
             });
         }
     } else {

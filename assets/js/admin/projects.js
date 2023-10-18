@@ -117,10 +117,20 @@ function displayProjects() {
         deleteButton.innerHTML = '<i class="fa fa-trash" aria-hidden="true"></i>';
         deleteButton.onclick = function() {
             // Prompt user for confirmation before deleting project
-            var confirmDelete = confirm("Are you sure you want to delete this project?");
-            if (confirmDelete) {
-                deleteProject(project.id);
-            }
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+              })
+              .then((willDelete) => {
+                if (willDelete) {
+                  deleteProject(project.id);
+                } else {
+                    Swal.fire("Your data is safe!");
+                }
+              });
         };
 
         cardBody2.appendChild(cardTitle);
@@ -325,16 +335,18 @@ function displayTasks(projectId) {
     console.log(project);
 
     if (project && project.tasks.length > 0) {
+        $count = 1;
         project.tasks.forEach(function (task) {
             var newRow = taskList.insertRow(taskList.rows.length);
             newRow.innerHTML = `
-                <td>${task.taskID}</td>
+                <td>${$count}</td>
                 <td>${task.taskName}</td>
                 <td>${task.taskDescription}</td>
                 <td>
                     <button class="btn btn-sm" onclick="deleteTask(${task.taskID}, ${project.id})"><i class="fa fa-trash" aria-hidden="true"></i></button>
                 </td>
             `;
+            $count++;
         });
     } else {
         // If there are no tasks for this project, display a message
@@ -354,34 +366,41 @@ function deleteTask(taskId, projectId) {
     // Find the project with the specified projectId
     var project = projects.find(project => project.id === projectId);
 
-    // Prompt user for confirmation before deleting project
-    var confirmDelete = confirm("Are you sure you want to delete this task?");
-    if (confirmDelete) {
-
-        project.tasks.filter(task => task.taskID == taskId).forEach( task => {
-            //check if task has been assigned or not before deleting a task.
-            if(checkTaskAssigned(task)){
-                errorMsg("This task has been assigned to a member. Remove the task assignment first to delete a task."); 
-                return
-            }
-            else{
-
-                project.tasks = project.tasks.filter(task => task.taskID !== taskId);
-
-                // Update projects in local storage
-                localStorage.setItem('projects', JSON.stringify(projects));
-            
-                // Refresh the task list display
-                displayTasks(projectId);
-
-                //Refresh the assigned task list display
-                displayAssignedTasks(projectId)
+    // Prompt user for confirmation before deleting task
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this task!",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            project.tasks.filter(task => task.taskID == taskId).forEach( task => {
+                //check if task has been assigned or not before deleting a task.
+                if(checkTaskAssigned(task)){
+                    errorMsg("This task has been assigned to a member. Remove the task assignment first to delete a task."); 
+                    return
+                }
+                else{
+    
+                    project.tasks = project.tasks.filter(task => task.taskID !== taskId);
+    
+                    // Update projects in local storage
+                    localStorage.setItem('projects', JSON.stringify(projects));
                 
-            }
-        })
-
-        
-    }
+                    // Refresh the task list display
+                    displayTasks(projectId);
+    
+                    //Refresh the assigned task list display
+                    displayAssignedTasks(projectId)
+                    
+                }
+            })
+        } else {
+            Swal.fire("Your data is safe!");
+        }
+      });
     
 }
 
@@ -548,21 +567,22 @@ function displayAssignedTasks(projectId) {
                 <td colspan="4"><p class="no-task">No tasks assigned at the moment.</p></td>
             `;
         } else {
+            $count = 1;
             assignedTasks.forEach(function (task) {
-
                 //Find the assigned member of the task
                 var assignedMember = users.find(user => user.userID === task.assignedMember);
                 console.log("task:"+task.taskID+" got:" +assignedMember)
 
                 var newRow = assignedTaskList.insertRow(assignedTaskList.rows.length);
                 newRow.innerHTML = `
-                    <td>${task.taskID}</td>
+                    <td>${$count}</td>
                     <td>${task.taskName}</td>
                     <td>${assignedMember.name}</td>
                     <td>
                         <button class="btn btn-sm" onclick="deleteAssign(${project.id}, ${task.taskID})"> <i class="fa fa-trash" aria-hidden="true"></i></button>
                     </td>
                 `;
+                $count++;
             });
         }
     } else {
@@ -581,19 +601,24 @@ function deleteAssign(projectId, taskId) {
         var task = project.tasks.find(task => task.taskID === taskId);
 
         if (task) {
-            // Ask for confirmation
-            var confirmDelete = confirm("Are you sure you want to remove the assignment?");
-            
-            if (confirmDelete) {
-                // Remove the assigned member
-                task.assignedMember = null;
 
-                // Update projects in local storage
-                localStorage.setItem("projects", JSON.stringify(projects));
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this assignment!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+              })
+              .then((willDelete) => {
+                if (willDelete) {
+                    task.assignedMember = null;
+                    localStorage.setItem("projects", JSON.stringify(projects));
+                    displayAssignedTasks(projectId);
+                } else {
+                    Swal.fire("Your data is safe!");
+                }
+              });
 
-                // Optionally, you can refresh the assigned task list display
-                displayAssignedTasks(projectId);
-            }
         } else {
             console.error("Task not found.");
         }

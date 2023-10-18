@@ -28,12 +28,12 @@ function displayMembers() {
         newRow.innerHTML = `
         <td colspan="7"><p class="no-task">No members available at the moment!</p></td> `;
     } else {
-
+        $count = 1;
         // Loop through users and add them to the table
         members.forEach(function(user) {
             var newRow = membersList.insertRow(membersList.rows.length);
             newRow.innerHTML = `
-                <td>${user.userID}</td>
+                <td>${$count}</td>
                 <td>${user.name}</td>
                 <td>${user.email}</td>
                 <td>
@@ -43,6 +43,7 @@ function displayMembers() {
                     </div>
                 </td>
             `;
+            $count++;
         });
     }
 }

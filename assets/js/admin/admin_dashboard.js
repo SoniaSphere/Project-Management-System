@@ -152,7 +152,8 @@ function displayTotalCostPieChart() {
         });
 
         projectLabels.push(project.name);
-        projectCostData.push(totalCost);
+        // Manually format totalCost as currency
+        projectCostData.push(totalCost.toFixed(2));
     });
 
     console.log(projectCostData);

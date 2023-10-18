@@ -405,3 +405,8 @@ span.go-back-btn {
     color: #59678f;
     cursor: pointer;    
 }
+
+select#role {
+    margin-bottom: 10px;
+    border: 1px dashed #3886e7;
+}
