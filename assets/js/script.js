@@ -1,5 +1,23 @@
 var users = JSON.parse(localStorage.getItem("users"));
-console.log(users);
+function successMsg(msg){
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: msg,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+function errorMsg(msg){
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: msg,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
 
 function login() {
     var email = document.querySelector("#email").value;
@@ -7,7 +25,7 @@ function login() {
 
     // Check if email and password are not empty
     if (email.trim() === "" || password.trim() === "") {
-        alert("Please enter both email and password.");
+        errorMsg("Please enter both email and password.");
         return;
     }
 
@@ -30,7 +48,7 @@ function login() {
             window.location.href = "template-parts/member/member_dashboard.html";
         }
     } else {
-        alert("Invalid credentials. Please try again.");
+        errorMsg("Invalid credentials. Please try again.");
     }
 }
 
@@ -44,7 +62,7 @@ function register() {
 
     // Check if email, password, and role are not empty
     if (email.trim() === "" || password.trim() === "" || role.trim() === "") {
-        alert("Please fill in all fields.");
+        errorMsg("Please fill in all fields.");
         return;
     }
 
@@ -57,7 +75,7 @@ function register() {
     });
 
     if (existingUser) {
-        alert("This email is already registered. Please use a different email.");
+        errorMsg("This email is already registered. Please use a different email.");
         return;
     }
 
@@ -71,7 +89,7 @@ function register() {
     // Switch to the login tab
     document.querySelector("#login-tab").click();
 
-    alert("Registration successful! You can now log in.");
+    successMsg("Registration successful! You can now log in.");
 }
 
 function registerUser(email, password, role, name) {

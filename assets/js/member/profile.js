@@ -3,6 +3,26 @@ const roleOptions = [
     { value: 'administrator', label: 'Admin' },
 ];
 
+function successMsg(msg){
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: msg,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+function errorMsg(msg){
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: msg,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
 function displayProfile(){
 
     var currentUser = JSON.parse(localStorage.getItem("currentUser")); 
@@ -37,17 +57,17 @@ function updateProfile(){
     var c_pwd = document.getElementById('c_password').value;
 
     if(name.trim() === "" || pwd.trim() === "" || c_pwd.trim() === ""){
-        alert("Please fill in all fields.")
+        errorMsg("Please fill in all fields.")
         return
     }
 
     if(pwd !== c_pwd){
-        alert("Passwords does not match.")
+        errorMsg("Passwords does not match.")
         return
     }
 
     if(pwd == currentUser.password){
-        alert("New password cannot be old password.")
+        errorMsg("New password cannot be old password.")
         return
     }
 
@@ -67,7 +87,7 @@ function updateProfile(){
     // Save the updated users back to localStorage
     localStorage.setItem("users", JSON.stringify(users));
 
-    alert("Profile Updated Successfully.")
+    successMsg("Profile Updated Successfully.")
     displayProfile()
 
 }

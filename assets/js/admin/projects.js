@@ -3,6 +3,26 @@ var currentUserID = currentUser.userID;
 var addProjects = document.getElementById("add-projects");
 var noProjectCt = document.getElementById("no-project-ct");
 
+function successMsg(msg){
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: msg,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
+function errorMsg(msg){
+    Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: msg,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+
 // Function to add a project
 function addProject() {
     
@@ -10,6 +30,11 @@ function addProject() {
     var projectDescription = document.getElementById("projectDescription").value;
 
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
+
+    if(projectName.trim() == '' || projectDescription.trim() == ''){
+        errorMsg('Please fill all the fields!')
+        return;
+    }
 
     // Create a new project object
     var newProject = {
@@ -19,6 +44,8 @@ function addProject() {
         adminId: currentUserID,
         tasks: []
     };
+
+    successMsg('Project is added successfully!')
 
     projects.push(newProject);
     localStorage.setItem("projects", JSON.stringify(projects));
@@ -128,6 +155,11 @@ function saveEditedProject() {
     var newName = document.getElementById("editProjectName").value;
     var newDescription = document.getElementById("editProjectDescription").value;
 
+    if(newName.trim() == '' || newDescription.trim() == ''){
+        errorMsg('Please fill all the fields!')
+        return;
+    }
+
 
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
 
@@ -145,7 +177,7 @@ function saveEditedProject() {
         localStorage.setItem("projects", JSON.stringify(projects));
     }
 
-    alert(`Project updated successfully!`);
+    successMsg(`Project updated successfully!`);
     
      // Close the modal
      $('#editProjectModal').modal('hide');
@@ -232,7 +264,7 @@ function addTask() {
 
     // Validate if all fields are filled
     if (taskName.trim() === "" || taskDescription.trim() === "") {
-        alert("Please fill in all fields.");
+        errorMsg("Please fill in all fields.");
         return;
     }
 
@@ -268,7 +300,7 @@ function addTask() {
          document.getElementById("taskName").value = "";
          document.getElementById("description").value = "";
     } else {
-        alert("Project not found.");
+        errorMsg("Project not found.");
     }
 }
 
@@ -320,7 +352,7 @@ function deleteTask(taskId, projectId) {
         project.tasks.filter(task => task.taskID == taskId).forEach( task => {
             //check if task has been assigned or not before deleting a task.
             if(checkTaskAssigned(task)){
-                alert("This task has been assigned to a member. Remove the task assignment first to delete a task."); 
+                errorMsg("This task has been assigned to a member. Remove the task assignment first to delete a task."); 
                 return
             }
             else{
@@ -473,13 +505,13 @@ function assignTask() {
                 // Close the modal
                 $('#assignTaskModal').modal('hide');
             } else {
-                alert("Task not found.");
+                errorMsg("Task not found.");
             }
         } else {
-            alert("Project not found.");
+            errorMsg("Project not found.");
         }
     } else {
-        alert("Please select a member and a task.");
+        errorMsg("Please select a member and a task.");
     }
 }
 
