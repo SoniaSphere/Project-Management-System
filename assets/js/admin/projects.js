@@ -41,7 +41,6 @@ function addProject() {
     });
 }
 
-
 function displayProjects() {
     
     var allProjects = JSON.parse(localStorage.getItem("projects")) || [];
@@ -240,10 +239,13 @@ function addTask() {
     var taskName = document.getElementById("taskName").value;
     var taskDescription = document.getElementById("description").value;
 
-    // Validate if all fields are filled
     if (taskName.trim() === "" || taskDescription.trim() === "") {
-        alert("Please fill in all fields.");
-        return;
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Task name and description should not be empty!',
+        });
+        return; // Exit the function to prevent adding an empty project
     }
 
     // Retrieve projects from localStorage
@@ -459,6 +461,15 @@ function populateAssignTaskModal() {
 function assignTask() {
     var memberId = parseInt(document.getElementById("memberDropdown").value);
     var taskId = parseInt(document.getElementById("taskDropdown").value);
+
+    if (memberId.trim() === "" || taskId.trim() === "") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Member ID and Task should not be empty!',
+        });
+        return; // Exit the function to prevent adding an empty project
+    }
 
     if (memberId && taskId) {
         var projects = JSON.parse(localStorage.getItem("projects")) || [];
