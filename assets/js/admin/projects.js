@@ -3,11 +3,18 @@ var currentUserID = currentUser.userID;
 var addProjects = document.getElementById("add-projects");
 var noProjectCt = document.getElementById("no-project-ct");
 
-// Function to add a project
 function addProject() {
-    
     var projectName = document.getElementById("projectName").value;
     var projectDescription = document.getElementById("projectDescription").value;
+
+    if (projectName.trim() === "" || projectDescription.trim() === "") {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Project name and description should not be empty!',
+        });
+        return; // Exit the function to prevent adding an empty project
+    }
 
     var projects = JSON.parse(localStorage.getItem("projects")) || [];
 
@@ -17,7 +24,7 @@ function addProject() {
         name: projectName,
         description: projectDescription,
         adminId: currentUserID,
-        tasks: []
+        tasks: [],
     };
 
     projects.push(newProject);
@@ -25,7 +32,15 @@ function addProject() {
 
     $('#addProjectModal').modal('hide');
     displayProjects();
+
+    // Show a success message
+    Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Project added successfully!',
+    });
 }
+
 
 function displayProjects() {
     
