@@ -1,3 +1,8 @@
+var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+if (currentUser.role !== "administrator") {
+    window.location.href = "../../index.html";
+}
+
 function getCurrentAdminID(){
     var currentUser = JSON.parse(localStorage.getItem("currentUser"));
     return currentUser.userID;

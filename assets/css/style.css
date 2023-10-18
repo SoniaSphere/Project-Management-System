@@ -147,6 +147,8 @@ div#tasksContainer,
 div#taskAssignmentContainer {
     width: 100%;
     display: none;
+    max-height: 450px;
+    overflow: scroll;
 }
 
 div#projectsContainer .card-body .btn {

@@ -63,6 +63,10 @@ function showProjectDetails(projectId) {
     projectDetailsContainer.style.display = 'block';
     projectDetailsContainer.innerHTML = '';
 
+    var backElement = document.createElement("span");
+    backElement.classList.add('go-back-btn');
+    backElement.innerHTML = `<i class="fa fa-arrow-circle-left" aria-hidden="true" onclick="window.location.reload();"></i>`;
+
     // Create elements to display project details
     var projectNameElement = document.createElement("h3");
     projectNameElement.textContent = project.name;
@@ -70,6 +74,7 @@ function showProjectDetails(projectId) {
     var projectDescriptionElement = document.createElement("p");
     projectDescriptionElement.textContent = project.description;
 
+    projectDetailsContainer.appendChild(backElement);
     projectDetailsContainer.appendChild(projectNameElement);
     projectDetailsContainer.appendChild(projectDescriptionElement);
 

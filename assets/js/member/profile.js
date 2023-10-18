@@ -92,20 +92,5 @@ function updateProfile(){
 
 }
 
-// const profilePicture = document.getElementById('profile_pic');
-// const profilePictureInput = document.getElementById('profile-picture-input');
-
-// profilePicture.addEventListener('click', () => {
-//     profilePictureInput.click();
-// });
-
-// profilePictureInput.addEventListener('change', () => {
-//     const file = profilePictureInput.files[0];
-//     if (file) {
-//         const url = URL.createObjectURL(file);
-//         profilePicture.src = url;
-//     }
-// });
-
 // Initialize project list on page load
 window.onload = displayProfile;

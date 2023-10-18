@@ -1,5 +1,10 @@
 var currentUser = JSON.parse(localStorage.getItem("currentUser"));
 var currentUserID = currentUser.userID;
+
+if (currentUser.role !== "administrator") {
+    window.location.href = "../../index.html";
+}
+
 var addProjects = document.getElementById("add-projects");
 var noProjectCt = document.getElementById("no-project-ct");
 
@@ -49,6 +54,10 @@ function addProject() {
 
     projects.push(newProject);
     localStorage.setItem("projects", JSON.stringify(projects));
+
+     // Clear the input fields
+     document.querySelector("#projectName").value = "";
+     document.querySelector("#projectDescription").value = "";
 
     $('#addProjectModal').modal('hide');
     displayProjects();

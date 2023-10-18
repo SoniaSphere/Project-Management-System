@@ -1,4 +1,5 @@
 var users = JSON.parse(localStorage.getItem("users"));
+
 function successMsg(msg){
     Swal.fire({
         icon: 'success',
@@ -29,8 +30,13 @@ function login() {
         return;
     }
 
+    if(!validateEmail(email)){
+        errorMsg("Please enter a valid email");
+        return;
+    }
+
     // Retrieve data from localStorage
-    var users = JSON.parse(localStorage.getItem("users"));
+    var users = JSON.parse(localStorage.getItem("users")) || [];
 
     // Check if user exists
     var user = users.find(function (user) {
@@ -66,6 +72,11 @@ function register() {
         return;
     }
 
+    if(!validateEmail(email)){
+        errorMsg("Please enter a valid email");
+        return;
+    }
+
     // Retrieve existing users from localStorage or initialize an empty array
     var users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -82,9 +93,10 @@ function register() {
     registerUser(email, password, role, name);
 
     // Clear the input fields
-    document.querySelector("#email").value = "";
-    document.querySelector("#password").value = "";
-    document.querySelector("#role").value = "";
+    document.querySelector("#reg-name").value = "";
+    document.querySelector("#reg-email").value = "";
+    document.querySelector("#reg-password").value = "";
+    document.querySelector("#role").value = "member";
 
     // Switch to the login tab
     document.querySelector("#login-tab").click();
@@ -153,4 +165,11 @@ function logout() {
     // Redirect to the login page (you may adjust the URL as needed)
     window.location.href = "../../index.html";
 }
+
+function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+//localStorage.clear();
 

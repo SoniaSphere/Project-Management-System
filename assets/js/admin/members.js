@@ -2,6 +2,10 @@ window.onload = function () {
     displayMembers();
 };
 
+if (currentUser.role !== "administrator") {
+    window.location.href = "../../index.html";
+}
+
 // members
 function displayMembers() {
     // Retrieve users from localStorage
