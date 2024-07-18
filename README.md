@@ -62,4 +62,5 @@ To run the Task Management System, you need a modern web browser with JavaScript
 - Enter hours taken to complete tasks.
 - View personal dashboard for task status updates.
 
-
+## Contact
+For any inquiries or feedback, please contact at [nainsonia92@gmail.com](mailto:nainsonia92@gmail.com).
