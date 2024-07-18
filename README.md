@@ -9,7 +9,7 @@
 The Task Management System is a web-based application designed to help administrators manage projects and tasks efficiently. It allows administrators to add projects, assign tasks to members, and track the progress and completion of tasks. Members can mark their tasks as in-progress or completed and log the hours taken to complete each task. The system provides dashboards for both administrators and members to view their respective activities and progress.
 
 ## Screenshots
-![Admin Dashboard](path/to/admin-dashboard-screenshot.png)
+![Admin Dashboard](assets/images/TMS-Screen.png)
 
 ## Live Demo
 View the live system [here](https://yourdomain.com/task-management-system).
